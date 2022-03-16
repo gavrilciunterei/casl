@@ -85,7 +85,9 @@ const Todo: FC<{
                         />
                       </Can>
                     </ListItemIcon>
-                    <ListItemText>{val.value}</ListItemText>
+                    <Can I="read" a="Todo">
+                      <ListItemText>{val.value}</ListItemText>
+                    </Can>
                   </ListItem>
                 );
               })}
