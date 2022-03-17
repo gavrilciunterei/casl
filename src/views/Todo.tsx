@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import '../App.css';
 import {
   Button,
@@ -11,18 +11,16 @@ import { DeleteOutline } from '@material-ui/icons';
 import Can from '../casl/Can';
 import SelectList from '../components/SelectList';
 
-const Todo: FC<{
-  role: (role: string) => void;
-}> = (props) => {
+type RoleProps = {
+  role: string;
+  setRole: Dispatch<SetStateAction<string>>;
+};
+
+const Todo = ({ role, setRole }: RoleProps) => {
   const [value, setValue] = useState<string>();
   const [todo, setTodo] = useState<{ value: string; id: string }[] | undefined>(
     []
   );
-  const [role, setRole] = useState<string>('admin');
-
-  useEffect(() => {
-    props.role(role);
-  }, [role]);
 
   return (
     <div className="container">

@@ -10,20 +10,28 @@ import { RootState } from './store';
 
 function App() {
   const dispatch = useDispatch();
-  const [role, setRole] = useState('admin');
-  const ability = buildAbilityFor(role);
-
   const { myUser } = useSelector((state: RootState) => state.users);
+
+  const [role, setRole] = useState('');
+  const ability = buildAbilityFor(role);
 
   useEffect(() => {
     dispatch(getUserRequest());
   }, []);
 
+  useEffect(() => {
+    if (Object.keys(myUser).length > 0) {
+      setRole(myUser.role);
+    }
+  }, [myUser]);
+
   return (
     <div className="App">
       <AbilityContext.Provider value={ability}>
-        <h2>Current role: {role}</h2>
-        <Todo role={(role) => setRole(role)} />
+        <h2>
+          {myUser.firstName} current role: {role}
+        </h2>
+        <Todo setRole={setRole} role={role} />
       </AbilityContext.Provider>
     </div>
   );
