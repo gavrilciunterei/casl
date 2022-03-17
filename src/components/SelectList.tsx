@@ -1,28 +1,26 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { MenuItem, Select } from '@material-ui/core';
+import Select from 'react-select';
 import '../App.css';
 
 type SelectListProps = {
-  role: string;
-  setRole: Dispatch<SetStateAction<string>>;
+  role: {};
+  setRole: Dispatch<SetStateAction<{ value: string; label: string }>>;
 };
 
 function SelectList({ role, setRole }: SelectListProps) {
+  const options: any = [
+    { value: 'admin', label: 'admin' },
+    { value: 'staff', label: 'staff' },
+    { value: 'viewer', label: 'viewer' },
+  ];
+
+  const handleChange = (option: any) => {
+    setRole({ value: option.value, label: option.label });
+  };
+
   return (
     <div className="container-select">
-      <Select
-        onChange={(value) => {
-          // @ts-ignore
-          setRole(value.target.value);
-        }}
-        value={role}
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-      >
-        <MenuItem value={'admin'}>Admin</MenuItem>
-        <MenuItem value={'staff'}>Staff</MenuItem>
-        <MenuItem value={'viewer'}>Viewer</MenuItem>
-      </Select>
+      <Select defaultValue={role} onChange={handleChange} options={options} />
     </div>
   );
 }

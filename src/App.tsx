@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { buildAbilityFor } from './casl/ability';
 import { AbilityContext } from './casl/Can';
@@ -12,26 +12,19 @@ function App() {
   const dispatch = useDispatch();
   const { myUser } = useSelector((state: RootState) => state.users);
 
-  const [role, setRole] = useState('');
-  const ability = buildAbilityFor(role);
+  const ability = buildAbilityFor(myUser.role ? myUser.role : 'viewer');
 
   useEffect(() => {
     dispatch(getUserRequest());
   }, []);
 
-  useEffect(() => {
-    if (Object.keys(myUser).length > 0) {
-      setRole(myUser.role);
-    }
-  }, [myUser]);
-
   return (
     <div className="App">
       <AbilityContext.Provider value={ability}>
         <h2>
-          {myUser.firstName} current role: {role}
+          {myUser.firstName} current role: {myUser.role}
         </h2>
-        <Todo setRole={setRole} role={role} />
+        <Todo />
       </AbilityContext.Provider>
     </div>
   );

@@ -1,7 +1,17 @@
 import { Types } from '../actions/users';
 
-const initial_state = {
-  myUser: {},
+type MyUserProps = {
+  role: string;
+};
+
+type InicialProps = {
+  myUser?: MyUserProps;
+};
+
+const initial_state: InicialProps = {
+  myUser: {
+    role: '',
+  },
 };
 
 export default function usersReducer(state = initial_state, action: any) {
@@ -11,7 +21,11 @@ export default function usersReducer(state = initial_state, action: any) {
         ...state,
         myUser: action.payload,
       };
-
+    case Types.UPDATE_ROLE:
+      return {
+        ...state,
+        myUser: { ...state.myUser, role: action.payload },
+      };
     default:
       return state;
   }

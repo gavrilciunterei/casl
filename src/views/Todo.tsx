@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 import {
   Button,
@@ -11,16 +11,32 @@ import { DeleteOutline } from '@material-ui/icons';
 import Can from '../casl/Can';
 import SelectList from '../components/SelectList';
 
-type RoleProps = {
-  role: string;
-  setRole: Dispatch<SetStateAction<string>>;
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { updateRole } from '../store/actions/users';
 
-const Todo = ({ role, setRole }: RoleProps) => {
+const Todo = () => {
+  const { myUser } = useSelector((state: RootState) => state.users);
+  const dispatch = useDispatch();
+
+  const [localRole, setLocalRole] = useState({ label: '', value: '' });
+
   const [value, setValue] = useState<string>();
   const [todo, setTodo] = useState<{ value: string; id: string }[] | undefined>(
     []
   );
+
+  useEffect(() => {
+    if (Object.keys(myUser).length > 0 && localRole.label === '') {
+      setLocalRole({ value: myUser.role, label: myUser.role });
+    }
+  }, [myUser]);
+
+  useEffect(() => {
+    if (localRole.label !== '') {
+      dispatch(updateRole(localRole.value));
+    }
+  }, [localRole]);
 
   return (
     <div className="container">
@@ -28,7 +44,9 @@ const Todo = ({ role, setRole }: RoleProps) => {
         <div>
           <div>
             <h2>Subject: Todo</h2>
-            <SelectList role={role} setRole={setRole} />
+            {localRole.label !== '' && (
+              <SelectList role={localRole} setRole={setLocalRole} />
+            )}
 
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <form>
